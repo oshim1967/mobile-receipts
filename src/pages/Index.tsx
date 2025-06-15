@@ -58,7 +58,7 @@ const Index = () => {
 
   if (showLangScreen) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-pink-300">
         <LanguageSelector selected={lang} onSelect={handleSelectLang} />
       </div>
     );
@@ -66,7 +66,7 @@ const Index = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-pink-300">
         <div className="absolute top-4 right-4">
           <Button variant="ghost" onClick={() => setShowLangScreen(true)}>
             {translations[lang].changeLang}
@@ -77,19 +77,17 @@ const Index = () => {
     );
   }
 
-  // Приветствие после авторизации — фон остаётся ярким и человечек
+  // Приветствие после авторизации — ВАЖНО: фон и человечек теперь ярко-позитивные.
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-pink-300">
       <div className="absolute top-4 right-4">
         <Button variant="ghost" onClick={() => setShowLangScreen(true)}>
           {translations[lang].changeLang}
         </Button>
       </div>
       <div className="text-center animate-fade-in">
-        <div className="text-7xl mb-4">👨‍🎨</div>
-        <h1 className="text-4xl font-bold mb-4">
-          {translations[lang].welcome}
-        </h1>
+        <div className="text-7xl mb-4 drop-shadow-sm">👨‍🎨</div>
+        <h1 className="text-4xl font-bold mb-4">{translations[lang].welcome}</h1>
         <p className="text-xl text-muted-foreground">
           {lang === "uk"
             ? "Почніть створення свого проєкту тут!"
