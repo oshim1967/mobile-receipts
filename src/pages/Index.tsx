@@ -1,12 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { useLanguage, Lang } from "@/hooks/useLanguage";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { translations } from "@/locales";
 import { Button } from "@/components/ui/button";
 import { AuthForm } from "@/components/AuthForm";
+import { Onboarding } from "@/components/Onboarding";
 
 const STORAGE_KEY = "auth_data";
+const ONBOARDING_KEY = "onboarding_complete";
 
 const Index = () => {
   const { lang, setLanguage } = useLanguage();
@@ -16,6 +17,9 @@ const Index = () => {
 
   // Показываем форму авторизации, если auth_data отсутствует
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Состояние для экрана настройки
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("user_language");
@@ -28,6 +32,12 @@ const Index = () => {
     setIsAuthenticated(!!auth);
   }, []);
 
+  useEffect(() => {
+    // Онбординг показываем только при первом запуске (и если еще не завершен)
+    const completed = localStorage.getItem(ONBOARDING_KEY);
+    if (!completed) setShowOnboarding(true);
+  }, []);
+
   const handleSelectLang = (newLang: Lang) => {
     setLanguage(newLang);
     setShowLangScreen(false);
@@ -37,9 +47,18 @@ const Index = () => {
     setIsAuthenticated(true);
   };
 
+  const handleFinishOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem(ONBOARDING_KEY, "1");
+  };
+
+  if (showOnboarding) {
+    return <Onboarding onStart={handleFinishOnboarding} />;
+  }
+
   if (showLangScreen) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
         <LanguageSelector selected={lang} onSelect={handleSelectLang} />
       </div>
     );
@@ -47,7 +66,7 @@ const Index = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
         <div className="absolute top-4 right-4">
           <Button variant="ghost" onClick={() => setShowLangScreen(true)}>
             {translations[lang].changeLang}
@@ -58,15 +77,16 @@ const Index = () => {
     );
   }
 
-  // Если авторизован — показываем приветствие (в будущем тут будет дашборд)
+  // Приветствие после авторизации — фон остаётся ярким и человечек
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD6E0] via-[#C6F1E7] to-[#E3D8FD]">
       <div className="absolute top-4 right-4">
         <Button variant="ghost" onClick={() => setShowLangScreen(true)}>
           {translations[lang].changeLang}
         </Button>
       </div>
-      <div className="text-center">
+      <div className="text-center animate-fade-in">
+        <div className="text-7xl mb-4">👨‍🎨</div>
         <h1 className="text-4xl font-bold mb-4">
           {translations[lang].welcome}
         </h1>
